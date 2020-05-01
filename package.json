@@ -21,7 +21,7 @@
     "release": "yarn run build && np"
   },
   "dependencies": {
-    "@bytesoftio/use-value": "^1.2.0"
+    "@bytesoftio/use-value": "^2.1.2"
   },
   "peerDependencies": {
     "react": "^16.13.0",

@@ -11,8 +11,7 @@
 
 
 - [Description](#description)
-- [Usage](#usage)
-  - [useAsync](#useasync)
+- [useAsync](#useasync)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -20,15 +19,9 @@
 
 A convenient hook to deal with async operations inside React components.
 
-## Usage
+## useAsync
 
-### useAsync
-
-Function `useAsync` takes any other function that returns anything that can
-be *awaited* and returns its result as soon as the promise resolves. You also
-get some useful things like a `loading` indicator, the possible `error` that
-might have been thrown / or occurred through rejection and a `retry` function 
-to rerun the async procedure.
+Function `useAsync` takes any other function that returns anything that can be *awaited* and returns its result as soon as the promise resolves. You also get some useful things like a `loading` indicator, the possible `error` that might have been thrown / or occurred through rejection and a `retry` function to rerun the async procedure.
 
 ```tsx
 import React from "react"

@@ -2399,27 +2399,17 @@ img {
 			<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 			<ul>
 				<li><a href="#description">Description</a></li>
-				<li><a href="#usage">Usage</a><ul>
-						<li><a href="#useasync">useAsync</a></li>
-					</ul>
-				</li>
+				<li><a href="#useasync">useAsync</a></li>
 			</ul>
 			<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 			<a href="#description" id="description" style="color: inherit; text-decoration: none;">
 				<h2>Description</h2>
 			</a>
 			<p>A convenient hook to deal with async operations inside React components.</p>
-			<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-				<h2>Usage</h2>
-			</a>
 			<a href="#useasync" id="useasync" style="color: inherit; text-decoration: none;">
-				<h3>useAsync</h3>
+				<h2>useAsync</h2>
 			</a>
-			<p>Function <code>useAsync</code> takes any other function that returns anything that can
-				be <em>awaited</em> and returns its result as soon as the promise resolves. You also
-				get some useful things like a <code>loading</code> indicator, the possible <code>error</code> that
-				might have been thrown / or occurred through rejection and a <code>retry</code> function
-			to rerun the async procedure.</p>
+			<p>Function <code>useAsync</code> takes any other function that returns anything that can be <em>awaited</em> and returns its result as soon as the promise resolves. You also get some useful things like a <code>loading</code> indicator, the possible <code>error</code> that might have been thrown / or occurred through rejection and a <code>retry</code> function to rerun the async procedure.</p>
 			<pre><code class="language-tsx">import React from &quot;react&quot;
 import { useAsync } from &quot;@bytesoftio/use-async&quot;
 
@@ -2483,7 +2473,7 @@ const Component = () =&gt; {
 				<div class="tsd-signature tsd-kind-icon">Async<wbr>Action&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in types.ts:3</li>
+						<li>Defined in <a href="https://github.com/bytesoftio/use-async/blob/c7e1806/src/types.ts#L3">types.ts:3</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2514,7 +2504,7 @@ const Component = () =&gt; {
 				<div class="tsd-signature tsd-kind-icon">Async<wbr>Status&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>data<span class="tsd-signature-symbol">?: </span><a href="" class="tsd-signature-type">T</a><span class="tsd-signature-symbol">; </span>error<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>loading<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in types.ts:1</li>
+						<li>Defined in <a href="https://github.com/bytesoftio/use-async/blob/c7e1806/src/types.ts#L1">types.ts:1</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2544,7 +2534,7 @@ const Component = () =&gt; {
 				<div class="tsd-signature tsd-kind-icon">Async<wbr>Status<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">(</span>action<span class="tsd-signature-symbol">?: </span><a href="globals.html#asyncaction" class="tsd-signature-type">AsyncAction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">]</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in types.ts:2</li>
+						<li>Defined in <a href="https://github.com/bytesoftio/use-async/blob/c7e1806/src/types.ts#L2">types.ts:2</a></li>
 					</ul>
 				</aside>
 				<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -2560,7 +2550,7 @@ const Component = () =&gt; {
 				<div class="tsd-signature tsd-kind-icon">Use<wbr>Async<span class="tsd-signature-symbol">:</span> &lt;T&gt;<span class="tsd-signature-symbol">(</span>action<span class="tsd-signature-symbol">: </span><a href="globals.html#asyncaction" class="tsd-signature-type">AsyncAction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, dependencies<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="globals.html#asyncstatusarray" class="tsd-signature-type">AsyncStatusArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in types.ts:4</li>
+						<li>Defined in <a href="https://github.com/bytesoftio/use-async/blob/c7e1806/src/types.ts#L4">types.ts:4</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2607,7 +2597,7 @@ const Component = () =&gt; {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in useAsync.ts:7</li>
+								<li>Defined in <a href="https://github.com/bytesoftio/use-async/blob/c7e1806/src/useAsync.ts#L7">useAsync.ts:7</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
