@@ -4,10 +4,10 @@ import { useValue } from "@bytesoftio/use-value"
 
 const defaultStatus: AsyncStatus<any> = { data: undefined, loading: false, error: undefined }
 
-export const useAsync: UseAsync = <T>(action, dependencies = [] as any) => {
+export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
   const [status, setStatus] = useValue({ ...defaultStatus, loading: true })
 
-  const retry = (newAction: AsyncAction<T> = action) => {
+  const retry = (newAction: AsyncAction<TData> = action) => {
     setStatus({ ...defaultStatus, loading: true })
 
     Promise.resolve(newAction())
