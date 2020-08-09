@@ -131,7 +131,9 @@ describe("useAsync", () => {
     expect(changes).toBe(2)
     expect(target().text()).toEqual("data1")
 
-    await act(async () => receivedRetry())
+    await act(async () => {
+      receivedRetry()
+    })
 
     expect(changes).toBe(3)
     expect(target().text()).toEqual("loading")
@@ -192,14 +194,23 @@ describe("useAsync", () => {
     expect(changes).toBe(2)
     expect(target().text()).toEqual("data1")
 
-    await act(async () => receivedRetry(promise2))
+    let retryResolved = false
+
+    act(() => {
+      receivedRetry(promise2)
+        .then(() => {
+          retryResolved = true
+        })
+    })
 
     expect(changes).toBe(3)
     expect(target().text()).toEqual("loading")
+    expect(retryResolved).toBe(false)
 
     await act(async () => receivedResolve())
 
     expect(changes).toBe(4)
     expect(target().text()).toEqual("data-2")
+    expect(retryResolved).toBe(true)
   })
 })

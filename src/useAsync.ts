@@ -7,18 +7,15 @@ const defaultStatus: AsyncStatus<any> = { data: undefined, loading: false, error
 export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
   const [status, setStatus] = useValue({ ...defaultStatus, loading: true })
 
-  const retry = (newAction: AsyncAction<TData> = action) => {
+  const retry = async (newAction: AsyncAction<TData> = action) => {
     setStatus({ ...defaultStatus, loading: true })
 
-    Promise.resolve(newAction())
-      .then((data) => {
-        setStatus({ ...defaultStatus, data })
-      })
-      .catch((error) => {
-        setStatus({ ...defaultStatus, error })
-
-        return error
-      })
+    try {
+      const data = await newAction()
+      setStatus({ ...defaultStatus, data })
+    } catch (error) {
+      setStatus({ ...defaultStatus, error })
+    }
   }
 
   useEffect(() => { retry(action) }, dependencies)
