@@ -34,13 +34,13 @@ const fetchCommodityPrice = (commodity: string) => {
 }
 
 const Component = () => {
-  const [price, loading, error, retry] = useAsync(() => fetchCommodityPrice("gold"))
+  const [price, handle] = useAsync(() => fetchCommodityPrice("gold"))
 
-  if (loading) {
+  if (handle.loading) {
     return <span>Loading...</span>
   }
 
-  if (error) {
+  if (handle.error) {
     return <span>There was an error :(</span>
   }
 
@@ -48,10 +48,10 @@ const Component = () => {
     <div>
       <span>{price}</span>
       {/* reload commodity price */}
-      <button onClick={() => retry}>reload</button>
+      <button onClick={() => handle.retry()}>reload</button>
       {/* fetch price for another commodity by replacing */}
       {/* the async action with a slightly different one */}
-      <button onClick={() => retry(() => fetchCommodityPrice("silver"))}>fetch price for silver</button>
+      <button onClick={() => handle.retry(() => fetchCommodityPrice("silver"))}>fetch price for silver</button>
     </div>
   )
 }

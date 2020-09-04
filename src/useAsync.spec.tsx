@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { mount } from "enzyme"
-import { useAsync } from "./index"
+import { AsyncHandle, useAsync } from "./index"
 import { act } from "react-dom/test-utils"
 import { createTimeout } from "@bytesoftio/helpers-promises"
 
@@ -15,10 +15,10 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, loading, error, retry] = useAsync(() => promise)
+      const [data, handle] = useAsync(() => promise)
 
       return (
-        <h1>{loading ? "loading" : error ? error : data}</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
       )
     }
 
@@ -48,10 +48,10 @@ describe("useAsync", () => {
 
     const Test = () => {
       changes++
-      const [data, loading, error, retry] = useAsync(() => promise)
+      const [data, handle] = useAsync(() => promise)
 
       return (
-        <h1>{loading ? "loading" : error ? error : data}</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
       )
     }
 
@@ -71,10 +71,10 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, loading, error, retry] = useAsync(() => "data")
+      const [data, handle] = useAsync(() => "data")
 
       return (
-        <h1>{loading ? "loading" : error ? error : data}</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
       )
     }
 
@@ -96,14 +96,14 @@ describe("useAsync", () => {
     let receivedResolve: any
     let receivedReject: any
     let retries = 0
-    let receivedRetry: any
+    let receivedHandle: AsyncHandle<any>
 
     const promise = () => {
       return new Promise<string>((resolve, reject) => {
         receivedResolve = () => {
           retries++
 
-          resolve(`data${retries}`)
+          resolve(`data${ retries }`)
         }
         receivedReject = reject
       })
@@ -112,11 +112,11 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, loading, error, retry] = useAsync(promise)
-      receivedRetry = retry
+      const [data, handle] = useAsync(promise)
+      receivedHandle = handle
 
       return (
-        <h1>{loading ? "loading" : error ? error : data}</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
       )
     }
 
@@ -132,7 +132,7 @@ describe("useAsync", () => {
     expect(target().text()).toEqual("data1")
 
     await act(async () => {
-      receivedRetry()
+      receivedHandle.retry()
     })
 
     expect(changes).toBe(3)
@@ -144,18 +144,69 @@ describe("useAsync", () => {
     expect(target().text()).toEqual("data2")
   })
 
+  test("it reloads async action if dependency changes", async () => {
+    let receivedResolve: any
+    let receivedReject: any
+    let retries = 0
+    let receivedSetDependency: any
+
+    const promise = () => {
+      return new Promise<string>((resolve, reject) => {
+        receivedResolve = () => {
+          retries++
+
+          resolve(`data${ retries }`)
+        }
+        receivedReject = reject
+      })
+    }
+
+    let changes = 0
+    const Test = () => {
+      changes++
+      const [dependency, setDependency] = useState(0)
+      const [data, handle] = useAsync(promise, [dependency])
+      receivedSetDependency = setDependency
+
+      return (
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+      )
+    }
+
+    const wrapper = mount(<Test/>)
+    const target = () => wrapper.find("h1")
+
+    expect(target().text()).toEqual("loading")
+    expect(changes).toBe(1)
+
+    await act(async () => receivedResolve())
+
+    expect(changes).toBe(2)
+    expect(target().text()).toEqual("data1")
+
+    act(() => receivedSetDependency(1))
+
+    expect(changes).toBe(4)
+    expect(target().text()).toEqual("loading")
+
+    await act(async () => receivedResolve())
+
+    expect(changes).toBe(5)
+    expect(target().text()).toEqual("data2")
+  })
+
   test("it allows to retry a promise with new action", async () => {
     let receivedResolve: any
     let receivedReject: any
     let retries = 0
-    let receivedRetry: any
+    let receivedHandle: AsyncHandle<any>
 
     const promise1 = () => {
       return new Promise<string>((resolve, reject) => {
         receivedResolve = () => {
           retries++
 
-          resolve(`data${retries}`)
+          resolve(`data${ retries }`)
         }
         receivedReject = reject
       })
@@ -166,7 +217,7 @@ describe("useAsync", () => {
         receivedResolve = () => {
           retries++
 
-          resolve(`data-${retries}`)
+          resolve(`data-${ retries }`)
         }
         receivedReject = reject
       })
@@ -175,11 +226,11 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, loading, error, retry] = useAsync(promise1)
-      receivedRetry = retry
+      const [data, handle] = useAsync(promise1)
+      receivedHandle = handle
 
       return (
-        <h1>{loading ? "loading" : error ? error : data}</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
       )
     }
 
@@ -197,7 +248,7 @@ describe("useAsync", () => {
     let retryResolved = false
 
     act(() => {
-      receivedRetry(promise2)
+      receivedHandle.retry(promise2)!
         .then(() => {
           retryResolved = true
         })

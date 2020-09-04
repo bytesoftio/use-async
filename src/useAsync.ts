@@ -1,24 +1,26 @@
 import { useEffect } from "react"
-import { AsyncAction, AsyncStatus, UseAsync } from "./types"
+import { AsyncAction, AsyncHandle, UseAsync } from "./types"
 import { useValue } from "@bytesoftio/use-value"
 
-const defaultStatus: AsyncStatus<any> = { data: undefined, loading: false, error: undefined }
+const defaultHandle: AsyncHandle<any> = { data: undefined, loading: false, error: undefined, retry: null as any }
 
 export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
-  const [status, setStatus] = useValue({ ...defaultStatus, loading: true })
-
   const retry = async (newAction: AsyncAction<TData> = action) => {
-    setStatus({ ...defaultStatus, loading: true })
+    setHandle({ ...defaultHandle, loading: true })
 
     try {
       const data = await newAction()
-      setStatus({ ...defaultStatus, data })
+      setHandle({ ...defaultHandle, data })
     } catch (error) {
-      setStatus({ ...defaultStatus, error })
+      setHandle({ ...defaultHandle, error })
     }
   }
 
-  useEffect(() => { retry(action) }, dependencies)
+  const [handle, setHandle] = useValue({ ...defaultHandle, loading: true })
 
-  return [status.data, status.loading, status.error, retry]
+  useEffect(() => {
+    retry(action)
+  }, dependencies)
+
+  return [handle.data, { ...handle, retry }]
 }
