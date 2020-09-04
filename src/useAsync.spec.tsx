@@ -15,10 +15,10 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, handle] = useAsync(() => promise)
+      const handle = useAsync(() => promise)
 
       return (
-        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : handle.result }</h1>
       )
     }
 
@@ -48,10 +48,10 @@ describe("useAsync", () => {
 
     const Test = () => {
       changes++
-      const [data, handle] = useAsync(() => promise)
+      const handle= useAsync(() => promise)
 
       return (
-        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : handle.reload() }</h1>
       )
     }
 
@@ -71,10 +71,10 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, handle] = useAsync(() => "data")
+      const handle = useAsync(() => "data")
 
       return (
-        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : handle.result }</h1>
       )
     }
 
@@ -112,11 +112,11 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, handle] = useAsync(promise)
+      const handle = useAsync(promise)
       receivedHandle = handle
 
       return (
-        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : handle.result }</h1>
       )
     }
 
@@ -165,11 +165,11 @@ describe("useAsync", () => {
     const Test = () => {
       changes++
       const [dependency, setDependency] = useState(0)
-      const [data, handle] = useAsync(promise, [dependency])
+      const handle = useAsync(promise, [dependency])
       receivedSetDependency = setDependency
 
       return (
-        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : handle.result }</h1>
       )
     }
 
@@ -226,11 +226,11 @@ describe("useAsync", () => {
     let changes = 0
     const Test = () => {
       changes++
-      const [data, handle] = useAsync(promise1)
+      const handle = useAsync(promise1)
       receivedHandle = handle
 
       return (
-        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : data }</h1>
+        <h1>{ handle.loading ? "loading" : handle.error ? handle.error : handle.result }</h1>
       )
     }
 

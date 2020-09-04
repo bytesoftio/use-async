@@ -2,15 +2,15 @@ import { useEffect } from "react"
 import { AsyncAction, AsyncHandle, UseAsync } from "./types"
 import { useValue } from "@bytesoftio/use-value"
 
-const defaultHandle: AsyncHandle<any> = { data: undefined, loading: false, error: undefined, reload: null as any }
+const defaultHandle: AsyncHandle<any> = { result: undefined, loading: false, error: undefined, reload: null as any }
 
 export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
   const reload = async (newAction: AsyncAction<TData> = action) => {
     setHandle({ ...defaultHandle, loading: true })
 
     try {
-      const data = await newAction()
-      setHandle({ ...defaultHandle, data })
+      const result = await newAction()
+      setHandle({ ...defaultHandle, result })
     } catch (error) {
       setHandle({ ...defaultHandle, error })
     }
@@ -22,5 +22,5 @@ export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
     reload(action)
   }, dependencies)
 
-  return [handle.data, { ...handle, reload }]
+  return { ...handle, reload }
 }
