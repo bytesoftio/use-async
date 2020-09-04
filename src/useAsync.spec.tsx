@@ -132,7 +132,7 @@ describe("useAsync", () => {
     expect(target().text()).toEqual("data1")
 
     await act(async () => {
-      receivedHandle.retry()
+      receivedHandle.reload()
     })
 
     expect(changes).toBe(3)
@@ -195,7 +195,7 @@ describe("useAsync", () => {
     expect(target().text()).toEqual("data2")
   })
 
-  test("it allows to retry a promise with new action", async () => {
+  test("it allows to reload a promise with new action", async () => {
     let receivedResolve: any
     let receivedReject: any
     let retries = 0
@@ -245,23 +245,23 @@ describe("useAsync", () => {
     expect(changes).toBe(2)
     expect(target().text()).toEqual("data1")
 
-    let retryResolved = false
+    let reloadResolved = false
 
     act(() => {
-      receivedHandle.retry(promise2)!
+      receivedHandle.reload(promise2)!
         .then(() => {
-          retryResolved = true
+          reloadResolved = true
         })
     })
 
     expect(changes).toBe(3)
     expect(target().text()).toEqual("loading")
-    expect(retryResolved).toBe(false)
+    expect(reloadResolved).toBe(false)
 
     await act(async () => receivedResolve())
 
     expect(changes).toBe(4)
     expect(target().text()).toEqual("data-2")
-    expect(retryResolved).toBe(true)
+    expect(reloadResolved).toBe(true)
   })
 })
