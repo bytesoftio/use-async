@@ -21,7 +21,7 @@ A convenient hook to deal with async operations inside React components.
 
 ## useAsync
 
-Function `useAsync` takes any other function that returns anything that can be *awaited* and returns its result as soon as the promise resolves. You also get some useful things like a `loading` indicator, the possible `error` that might have been thrown / or occurred through rejection and a `retry` function to rerun the async procedure.
+Function `useAsync` takes any other function that returns anything that can be *awaited* and returns its result as soon as the promise resolves. You also get some useful things like a `loading` indicator, the possible `error` that might have been thrown / or occurred through rejection and a `reload` function to rerun the async procedure. Async action can also be canceled with `cancel` or resolved directly using `resolve`.
 
 ```tsx
 import React from "react"

@@ -1,26 +1,72 @@
-import { useEffect } from "react"
-import { AsyncAction, AsyncHandle, UseAsync } from "./types"
-import { useValue } from "@bytesoftio/use-value"
+import { useCallback, useEffect, useState } from "react"
+import { AsyncAction, AsyncCancel, AsyncReload, AsyncStatus, UseAsync } from "./types"
 
-const defaultHandle: AsyncHandle<any> = { result: undefined, loading: false, error: undefined, reload: null as any }
+const createAsyncStatus = <TResult = any>(status: Partial<AsyncStatus<TResult>> = {}): AsyncStatus<TResult> => {
+  return {
+    loading: false,
+    cancelled: false,
+    errored: false,
+    result: undefined,
+    error: undefined,
+    ...status,
+  }
+}
 
+// todo: switch to state machine :)
 export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
-  const reload = async (newAction: AsyncAction<TData> = action) => {
-    setHandle({ ...defaultHandle, loading: true })
+  const [status, setStatus] = useState(createAsyncStatus({ loading: true }))
+
+  const reload: AsyncReload<TData> = useCallback(async (newAction: AsyncAction<TData> = action) => {
+    setStatus(createAsyncStatus({ loading: true }))
 
     try {
       const result = await newAction()
-      setHandle({ ...defaultHandle, result })
-    } catch (error) {
-      setHandle({ ...defaultHandle, error })
-    }
-  }
 
-  const [handle, setHandle] = useValue({ ...defaultHandle, loading: true })
+      setStatus(status => {
+        if (status.cancelled || ! status.loading) {
+          return status
+        }
+
+        return createAsyncStatus({
+          result: result,
+        })
+      })
+
+    } catch (error) {
+      setStatus(createAsyncStatus({
+        errored: true,
+        error: error,
+      }))
+    }
+  }, [action])
+
+  const cancel: AsyncCancel = useCallback(() => {
+    setStatus(status => {
+      if ( ! status.loading || status.cancelled) {
+        return status
+      }
+
+      return createAsyncStatus({
+        cancelled: true,
+      })
+    })
+  }, [])
+
+  const resolve = useCallback((result: TData) => {
+    setStatus(createAsyncStatus({
+        result: result,
+      }),
+    )
+  }, [])
 
   useEffect(() => {
     reload(action)
   }, dependencies)
 
-  return { ...handle, reload }
+  return {
+    ...status,
+    cancel,
+    reload,
+    resolve,
+  }
 }
