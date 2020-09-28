@@ -1,6 +1,6 @@
 {
   "name": "@bytesoftio/use-async",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "author": "Maxim Kott",
   "license": "MIT",
   "main": "dist/index.js",
