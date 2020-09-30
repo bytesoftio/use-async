@@ -469,6 +469,42 @@ describe("useAsync", () => {
     expect(receivedHandle!.error).toBe(undefined)
   })
 
+  it("reload can be awaited", async () => {
+    let renders = 0
+    let receivedHandle: AsyncHandle<any>
+
+    const Test = () => {
+      renders++
+      receivedHandle = useAsync()
+
+      return null
+    }
+
+    const wrapper = mount(<Test/>)
+
+    expect(renders).toBe(1)
+    expect(receivedHandle!.loading).toBe(false)
+    expect(receivedHandle!.cancelled).toBe(false)
+    expect(receivedHandle!.errored).toBe(false)
+    expect(receivedHandle!.result).toBe(undefined)
+    expect(receivedHandle!.error).toBe(undefined)
+
+    let awaitedResult
+
+    await act(async () => {
+      awaitedResult = await receivedHandle.reload(() => "resolved result")
+      return createTimeout(0)
+    })
+
+    expect(renders).toBe(3)
+    expect(receivedHandle!.loading).toBe(false)
+    expect(receivedHandle!.cancelled).toBe(false)
+    expect(receivedHandle!.errored).toBe(false)
+    expect(receivedHandle!.result).toBe("resolved result")
+    expect(receivedHandle!.error).toBe(undefined)
+    expect(awaitedResult).toBe("resolved result")
+  })
+
   it("resolves directly", async () => {
     let promise = createPromise()
     let renders = 0

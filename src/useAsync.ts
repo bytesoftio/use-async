@@ -13,10 +13,15 @@ const createAsyncStatus = <TResult = any>(status: Partial<AsyncStatus<TResult>> 
 }
 
 // todo: switch to state machine :)
-export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
-  const [status, setStatus] = useState(createAsyncStatus({ loading: true }))
+export const useAsync: UseAsync = <TResult>(action?: AsyncAction<TResult>, dependencies = [] as any) => {
+  const receivedAnAction = !! action
+  const [status, setStatus] = useState(createAsyncStatus({ loading: receivedAnAction }))
 
-  const reload: AsyncReload<TData> = useCallback(async (newAction: AsyncAction<TData> = action) => {
+  const reload: AsyncReload<TResult> = useCallback(async (newAction: AsyncAction<TResult> | undefined = action) => {
+    if ( ! newAction) {
+      return status.result
+    }
+
     setStatus(createAsyncStatus({ loading: true }))
 
     try {
@@ -32,6 +37,7 @@ export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
         })
       })
 
+      return result
     } catch (error) {
       setStatus(createAsyncStatus({
         errored: true,
@@ -52,7 +58,7 @@ export const useAsync: UseAsync = <TData>(action, dependencies = [] as any) => {
     })
   }, [])
 
-  const resolve = useCallback((result: TData) => {
+  const resolve = useCallback((result: TResult) => {
     setStatus(createAsyncStatus({
         result: result,
       }),

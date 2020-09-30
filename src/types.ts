@@ -13,7 +13,7 @@ export type AsyncHandle<TResult> = AsyncStatus<TResult> & {
 }
 
 export type AsyncAction<TResult> = () => Promise<TResult> | TResult
-export type AsyncReload<TResult> = (action?: AsyncAction<TResult>) => Promise<void> | undefined
+export type AsyncReload<TResult> = (action?: AsyncAction<TResult>) => Promise<TResult | undefined> | TResult | undefined
 export type AsyncResolve<TResult> = (result: TResult) => void
 export type AsyncCancel = () => void
-export type UseAsync = <TResult>(action: AsyncAction<TResult>, dependencies?: any[]) => AsyncHandle<TResult>
+export type UseAsync = <TResult>(action?: AsyncAction<TResult>, dependencies?: any[]) => AsyncHandle<TResult>
